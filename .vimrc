@@ -64,7 +64,7 @@ set tabstop=4
 " 统一缩进为4
 set softtabstop=4
 set shiftwidth=4
-" 不要用空格代替制表符
+" 使用空格代替制表符
 set expandtab
 " 在行和段开始处使用制表符
 set smarttab
@@ -172,6 +172,7 @@ map <S-Right> :tabn<CR>
 map! <C-Z> <Esc>zzi
 map! <C-O> <C-Y>,
 map <C-A> ggVG$"+y
+map <Esc><Esc> :w<CR>
 map <F12> gg=G
 map <C-w> <C-w>w
 imap <C-k> <C-y>,
@@ -205,7 +206,7 @@ func! CompileRunGcc()
 		exec "!g++ % -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'cpp'
-		exec "!g++ % -o %<"
+		exec "!g++ % -std=c++11 -o %<"
 		exec "!time ./%<"
 	elseif &filetype == 'java' 
 		exec "!javac %" 
@@ -228,7 +229,7 @@ endfunc
 map <F8> :call Rungdb()<CR>
 func! Rungdb()
 	exec "w"
-	exec "!g++ % -g -o %<"
+	exec "!g++ % -std=c++11 -g -o %<"
 	exec "!gdb ./%<"
 endfunc
 
@@ -261,9 +262,6 @@ func FormartSrc()
     exec "e! %"
 endfunc
 "结束定义FormartSrc
-
-
-
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -367,24 +365,16 @@ let Tlist_Exist_OnlyWindow = 1  " 如果只有一个buffer，kill窗口也kill�
 ""let Tlist_Enable_Fold_Column = 0    " 不要显示折叠树  
 "let Tlist_Show_One_File=1            "不同时显示多个文件的tag，只显示当前文件的
 "设置tags  
-"set tags=tags  
-"set autochdir 
-
-
-
-
-
-
-
-
-
-
+set tags=tags;  
+set autochdir 
+"设置快捷键为Ctrl+F12
+map <C-F12> :!ctags -R --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "其他东东
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 "默认打开Taglist 
-let Tlist_Auto_Open=0 
+let Tlist_Auto_Open=1
 """""""""""""""""""""""""""""" 
 " Tag list (ctags) 
 """""""""""""""""""""""""""""""" 
@@ -399,16 +389,6 @@ let g:miniBufExplMapWindowNavArrows = 1
 let g:miniBufExplMapCTabSwitchBufs = 1
 let g:miniBufExplModSelTarget = 1  
 nmap tl :Tlist<cr>
-
-
-
-"输入法
-:let g:vimim_map='c-/'
-":let g:vimim_cloud='sougou' " QQ云输入
-:let g:vimim_punctuation=0	" 不用中文标点
-:set pastetoggle=<C-H>
-:let g:vimim_cloud=-1
-
 
 "python补全
 let g:pydiction_location = '~/.vim/after/complete-dict'
@@ -449,7 +429,7 @@ let g:indentLine_char = '┊'
 Bundle 'L9'
 Bundle 'FuzzyFinder'
 " non github repos
-Bundle 'git://git.wincent.com/command-t.git'
+Bundle 'https://github.com/wincent/command-t.git'
 Bundle 'Auto-Pairs'
 Bundle 'python-imports.vim'
 Bundle 'CaptureClipboard'
@@ -481,16 +461,6 @@ let g:html_indent_style1 = "inc"
 
 filetype plugin indent on     " required!
 "
-" Brief help
-" :BundleList          - list configured bundles
-" :BundleInstall(!)    - install(update) bundles
-" :BundleSearch(!) foo - search(or refresh cache first) for foo
-" :BundleClean(!)      - confirm(or auto-approve) removal of unused bundles
-"
-" see :h vundle for more details or wiki for FAQ
-" NOTE: comments after Bundle command are not allowed..
-"
-"
 "ctrlp设置
 "
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.png,*.jpg,*.gif     " MacOSX/Linux
@@ -501,3 +471,4 @@ let g:ctrlp_custom_ignore = '\v\.(exe|so|dll)$'
 let g:ctrlp_extensions = ['funky']
 
 let NERDTreeIgnore=['\.pyc']
+set cscopequickfix=s-,c-,d-,i-,t-,e-
